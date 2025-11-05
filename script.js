@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { 
   getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, 
@@ -143,3 +144,6 @@ const setTheme = (theme) => {
 };
 setTheme(localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
 themeBtn.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+=======
+
+>>>>>>> 66ca61c037a85dfec6a2532d5794b690a7255839
