@@ -5,13 +5,14 @@ import { getDatabase, ref, set } from "firebase/database";
 // Your web app's Firebase configuration
 // IMPORTANT: Replace with your own Firebase project's configuration!
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  databaseURL: "YOUR_DATABASE_URL",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyC1Qvlz8HCpeIydqg-etneUt95JkefGoUk",
+  authDomain: "lets-do-it-dd683.firebaseapp.com",
+  databaseURL: "https://lets-do-it-dd683-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "lets-do-it-dd683",
+  storageBucket: "lets-do-it-dd683.appspot.com",
+  messagingSenderId: "994172286869",
+  appId: "1:994172286869:web:6eff7b8868fb99062a689c",
+  measurementId: "G-8MGGFX5H8K"
 };
 
 // Initialize Firebase
