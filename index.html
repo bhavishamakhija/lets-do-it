@@ -1,13 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Firebase Realtime DB</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Let's Do It! - To-Do App</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+    body{background:linear-gradient(135deg,#6e8efb,#a777e4);min-height:100vh;padding:2rem;color:#333}
+    .container{max-width:600px;margin:0 auto;background:white;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.1);overflow:hidden}
+    header{background:#5c6bc0;color:white;padding:1.5rem;text-align:center}
+    header h1{font-size:1.8rem;font-weight:600}
+    .input-area{padding:1.5rem;display:flex;gap:10px;border-bottom:1px solid #eee}
+    #taskInput{flex:1;padding:12px;font-size:1rem;border:2px solid #ddd;border-radius:8px;outline:none}
+    #taskInput:focus{border-color:#5c6bc0}
+    #addBtn{padding:12px 20px;background:#5c6bc0;color:white;border:none;border-radius:8px;font-size:1rem;cursor:pointer}
+    #addBtn:hover{background:#3f51b5}
+    .tasks{padding:1rem;max-height:400px;overflow-y:auto}
+    .task-item{display:flex;align-items:center;padding:12px;background:#f9f9f9;border-radius:8px;margin-bottom:10px}
+    .task-item:hover{background:#f0f0f0}
+    .task-item input[type="checkbox"]{margin-right:12px;transform:scale(1.2);cursor:pointer}
+    .task-text{flex:1;font-size:1rem}
+    .task-text.completed{text-decoration:line-through;color:#888}
+    .delete-btn{background:#e74c3c;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer}
+    .delete-btn:hover{background:#c0392b}
+    .empty-state{text-align:center;padding:2rem;color:#999;font-style:italic}
+    footer{text-align:center;padding:1rem;color:#777;font-size:0.9rem}
+  </style>
 </head>
 <body>
-  <h1>Firebase Realtime Database</h1>
-  <div id="app"></div>
-  <script type="module" src="/app.js"></script>
+  <div class="container">
+    <header><h1>Let's Do It!</h1></header>
+    <div class="input-area">
+      <input type="text" id="taskInput" placeholder="What needs to be done?" />
+      <button id="addBtn">Add</button>
+    </div>
+    <div class="tasks" id="taskList">
+      <div class="empty-state">No tasks yet. Add one above!</div>
+    </div>
+    <footer>Made with ❤️ by You</footer>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    // YOUR FIREBASE CONFIG (from console)
+    const firebaseConfig = {
+      apiKey: "AIzaSyC1Qvlz8HCpeIydqg-etneUt95JkefGoUk",
+      authDomain: "lets-do-it-dd683.firebaseapp.com",
+      projectId: "lets-do-it-dd683",
+      storageBucket: "lets-do-it-dd683.appspot.com",
+      messagingSenderId: "994172286869",
+      appId: "1:994172286869:web:6eff7b8868fb99062a689c",
+      measurementId: "G-8MGGFX5H8K"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const taskInput = document.getElementById('taskInput');
+    const addBtn = document.getElementById('addBtn');
+    const taskList = document.getElementById('taskList');
+
+    addBtn.onclick = () => addTask();
+    taskInput.addEventListener('keypress', e => e.key === 'Enter' && addTask());
+
+    async function addTask() {
+      const text = taskInput.value.trim();
+      if (!text) return;
+      await addDoc(collection(db, 'tasks'), { text, completed: false, timestamp: new Date() });
+      taskInput.value = '';
+    }
+
+    onSnapshot(collection(db, 'tasks'), snap => {
+      taskList.innerHTML = snap.empty ? '<div class="empty-state">No tasks yet. Add one above!</div>' : '';
+      snap.docs.forEach(d => {
+        const t = d.data();
+        const div = document.createElement('div');
+        div.className = 'task-item';
+        div.innerHTML = `
+          <input type="checkbox" ${t.completed?'checked':''}>
+          <span class="task-text ${t.completed?'completed':''}">${t.text}</span>
+          <button class="delete-btn">Delete</button>
+        `;
+        div.querySelector('input').onchange = () => updateDoc(doc(db,'tasks',d.id), {completed: !t.completed});
+        div.querySelector('.delete-btn').onclick = () => deleteDoc(doc(db,'tasks',d.id));
+        taskList.appendChild(div);
+      });
+    });
+  </script>
 </body>
 </html>
