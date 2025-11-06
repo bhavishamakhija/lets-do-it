@@ -1,23 +1,8 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { 
-  getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, 
-  Timestamp, query, orderBy 
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { 
-  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-  onAuthStateChanged, signOut 
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, Timestamp, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyC10vLz8HCpelvdqg-etneUt95JkefGoUk",
-  authDomain: "lets-do-it-dd683.firebaseapp.com",
-  databaseURL: "https://lets-do-it-dd683-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "lets-do-it-dd683",
-  storageBucket: "lets-do-it-dd683.firebasestorage.app",
-  messagingSenderId: "994172286869",
-  appId: "1:994172286869:web:6eff7b0860fb99062a689c"
-};
-
+const firebaseConfig = { apiKey: "AIzaSyC10vLz8HCpelvdqg-etneUt95JkefGoUk", authDomain: "lets-do-it-dd683.firebaseapp.com", projectId: "lets-do-it-dd683", storageBucket: "lets-do-it-dd683.firebasestorage.app", messagingSenderId: "994172286869", appId: "1:994172286869:web:6eff7b0860fb99062a689c" };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -69,53 +54,37 @@ switchMode.onclick = () => {
   authError.classList.remove('show');
 };
 
-const showError = (msg) => {
-  authError.textContent = msg;
-  authError.classList.add('show');
-  setTimeout(() => authError.classList.remove('show'), 5000);
-};
+const showError = msg => { authError.textContent = msg; authError.classList.add('show'); setTimeout(() => authError.classList.remove('show'), 5000); };
 
 authBtn.onclick = async () => {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
-  if (!email || !password) return showError('Please fill in all fields');
-
+  if (!email || !password) return showError('Fill all fields');
   authForm.style.display = 'none';
   authLoading.style.display = 'block';
-
   try {
-    isLogin 
-      ? await signInWithEmailAndPassword(auth, email, password)
-      : await createUserWithEmailAndPassword(auth, email, password);
-  } catch (err) {
-    showError(err.message);
-    authForm.style.display = 'block';
-    authLoading.style.display = 'none';
-  }
+    isLogin ? await signInWithEmailAndPassword(auth, email, password) : await createUserWithEmailAndPassword(auth, email, password);
+  } catch (err) { showError(err.message); authForm.style.display = 'block'; authLoading.style.display = 'none'; }
 };
 
 logoutBtn.onclick = () => confirm('Logout?') && signOut(auth);
 
-const formatDate = (ts) => ts ? ts.toDate().toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'}) : '';
 const startTaskListener = () => {
   const q = query(tasksCol, orderBy('timestamp', 'desc'));
   unsubscribeTasks = onSnapshot(q, snap => renderTasks(snap.docs.map(d => ({id: d.id, ...d.data()}))));
 };
-const renderTasks = (docs) => {
-  taskList.innerHTML = docs.length === 0 
-    ? '<div class="empty-state">No tasks yet – add one!</div>'
-    : '';
+
+const renderTasks = docs => {
+  taskList.innerHTML = docs.length === 0 ? '<div class="empty-state">No tasks yet – add one!</div>' : '';
   let active = 0;
   docs.forEach(t => {
     if (!t.completed) active++;
     const div = document.createElement('div');
     div.className = 'task-item';
-    div.innerHTML = `
-      <input type="checkbox" ${t.completed?'checked':''}>
-      <span class="task-text ${t.completed?'completed':''}">${t.text||'Untitled'}</span>
-      ${t.due ? `<span class="due">${formatDate(t.due)}</span>` : ''}
-      <button class="delete-btn">Delete</button>
-    `;
+    div.innerHTML = `<input type="checkbox" ${t.completed?'checked':''}>
+      <span class="task-text ${t.completed?'completed':''}">${t.text||'Task'}</span>
+      ${t.due ? `<span class="due">${new Date(t.due.toDate()).toLocaleDateString()}</span>` : ''}
+      <button class="delete-btn">Delete</button>`;
     div.querySelector('input').onchange = () => updateDoc(doc(db, 'users', currentUser.uid, 'tasks', t.id), {completed: !t.completed});
     div.querySelector('.delete-btn').onclick = () => confirm('Delete?') && deleteDoc(doc(db, 'users', currentUser.uid, 'tasks', t.id));
     taskList.appendChild(div);
@@ -126,20 +95,12 @@ const renderTasks = (docs) => {
 const addTask = async () => {
   const text = taskInput.value.trim();
   if (!text) return;
-  await addDoc(tasksCol, {
-    text, completed: false,
-    due: dueInput.value ? Timestamp.fromDate(new Date(dueInput.value)) : null,
-    timestamp: Timestamp.now()
-  });
+  await addDoc(tasksCol, { text, completed: false, due: dueInput.value ? Timestamp.fromDate(new Date(dueInput.value)) : null, timestamp: Timestamp.now() });
   taskInput.value = ''; dueInput.value = '';
 };
 addBtn.onclick = addTask;
 taskInput.addEventListener('keydown', e => e.key === 'Enter' && addTask());
 
-const setTheme = (theme) => {
-  document.documentElement.dataset.theme = theme;
-  localStorage.setItem('theme', theme);
-  themeBtn.className = theme === 'dark' ? 'theme-toggle fas fa-sun' : 'theme-toggle fas fa-moon';
-};
+const setTheme = theme => { document.documentElement.dataset.theme = theme; localStorage.setItem('theme', theme); themeBtn.className = theme === 'dark' ? 'theme-toggle fas fa-sun' : 'theme-toggle fas fa-moon'; };
 setTheme(localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
-themeBtn.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+themeBtn.onclick = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
