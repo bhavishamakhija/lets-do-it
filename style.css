@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 :root{
   --primary:#5c6bc0;--primary-dark:#3f51b5;
   --danger:#e74c3c;--danger-dark:#c0392b;
@@ -60,7 +60,6 @@ footer{text-align:center;padding:1rem;color:var(--gray);font-size:.9rem}
   header{flex-direction:column;gap:10px}
   header h1{text-align:center}
 }
-=======
 body {
   background: linear-gradient(135deg, #5c6bc0, #a777e4);
   color: white;
@@ -70,4 +69,3 @@ body {
 }
 h1 { font-size: 3rem; }
 p { font-size: 1.2rem; }
->>>>>>> 66ca61c037a85dfec6a2532d5794b690a7255839
