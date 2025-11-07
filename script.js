@@ -2,17 +2,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, Timestamp, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyC10vLz8HCpelvdqg-etneUt95JkefGoUk",
-  authDomain: "lets-do-it-dd683.firebaseapp.com",
-  databaseURL: "https://lets-do-it-dd683-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "lets-do-it-dd683",
-  storageBucket: "lets-do-it-dd683.firebasestorage.app",
-  messagingSenderId: "994172286869",
-  appId: "1:994172286869:web:6eff7b0860fb99062a689c",
-  measurementId: "G-8MGGFX5H0K"
-};
+const firebaseConfig = { apiKey: "AIzaSyC10vLz8HCpelvdqg-etneUt95JkefGoUk", authDomain: "lets-do-it-dd683.firebaseapp.com", projectId: "lets-do-it-dd683", storageBucket: "lets-do-it-dd683.firebasestorage.app", messagingSenderId: "994172286869", appId: "1:994172286869:web:6eff7b0860fb99062a689c" };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -101,17 +91,22 @@ const startTaskListener = () => {
 // FILTER & RENDER TASKS
 const filterAndRenderTasks = () => {
   let filtered = allTasks.filter(t => {
-    // Filter by task type
-    if (currentTaskType === 'personal' && t.type !== 'personal') return false;
-    if (currentTaskType === 'team' && t.type !== 'team') return false;
+    // Safety check - ensure task has required fields
+    if (!t.type) t.type = 'personal';
+    if (!t.creatorId) return false;
 
-    // Filter by user (personal only for current user, team if creator or shared with)
-    if (t.type === 'personal' && t.creatorId !== currentUser.uid) return false;
-    if (t.type === 'team' && t.creatorId !== currentUser.uid && !t.sharedWith?.includes(currentUser.email)) return false;
+    // Filter by task type
+    if (currentTaskType === 'personal') {
+      if (t.type !== 'personal') return false;
+      if (t.creatorId !== currentUser.uid) return false;
+    } else if (currentTaskType === 'team') {
+      if (t.type !== 'team') return false;
+      if (t.creatorId !== currentUser.uid && !(t.sharedWith && t.sharedWith.includes(currentUser.email))) return false;
+    }
 
     // Filter by search
     const search = searchInput.value.toLowerCase();
-    if (search && !t.text.toLowerCase().includes(search)) return false;
+    if (search && t.text && !t.text.toLowerCase().includes(search)) return false;
 
     return true;
   });
@@ -166,12 +161,16 @@ const checkDueDates = docs => {
   const today = new Date().toDateString();
   docs.forEach(t => {
     if (t.due && !t.completed) {
-      const dueDate = new Date(t.due.toDate()).toDateString();
-      if (dueDate === today && Notification.permission === 'granted') {
-        new Notification('Task Due Today!', {
-          body: t.text,
-          icon: '📋'
-        });
+      try {
+        const dueDate = new Date(t.due.toDate()).toDateString();
+        if (dueDate === today && Notification.permission === 'granted') {
+          new Notification('Task Due Today!', {
+            body: t.text,
+            icon: '📋'
+          });
+        }
+      } catch(e) {
+        console.log('Error checking due date:', e);
       }
     }
   });
@@ -236,6 +235,11 @@ toggleBtns.forEach(btn => {
     filterAndRenderTasks();
   };
 });
+
+// Set Personal as default active
+if (toggleBtns.length > 0) {
+  toggleBtns[0].classList.add('active');
+}
 
 // SEARCH
 searchInput.addEventListener('input', filterAndRenderTasks);
