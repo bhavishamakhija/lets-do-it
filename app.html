@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="coquette">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,10 +7,11 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#5c6bc0">
+  <meta name="theme-color" content="#447F98">
 </head>
 <body>
 
+  <!-- Auth Modal -->
   <div class="modal" id="authModal">
     <div class="modal-content">
       <h2 id="modalTitle">Log In</h2>
@@ -28,30 +29,67 @@
     </div>
   </div>
 
+  <!-- Main App -->
   <div class="container" id="app" style="display:none">
     <header>
       <h1>Let's Do It!</h1>
       <div class="user-area">
         <span class="user-email" id="userEmail"></span>
         <button class="logout-btn" id="logoutBtn">Logout</button>
-        <a href="index.html" class="back-home-btn">← Back to Home</a>
-        <i class="theme-toggle fas fa-moon"></i>
+        <a href="index.html" class="back-home-btn">← Home</a>
+        <div class="theme-selector">
+          <select id="themeSelect">
+            <option value="coquette">🔵 Coquette</option>
+            <option value="midnight">🌙 Midnight</option>
+            <option value="sunset">🌅 Sunset</option>
+          </select>
+        </div>
       </div>
     </header>
 
+    <!-- Search Bar -->
+    <div class="search-container">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search tasks...">
+    </div>
+
+    <!-- Task Type Toggle -->
+    <div class="task-type-toggle">
+      <button class="toggle-btn active" data-type="personal">📝 Personal</button>
+      <button class="toggle-btn" data-type="team">👥 Team</button>
+    </div>
+
+    <!-- Input Area -->
     <div class="input-area">
       <input type="text" id="taskInput" placeholder="What needs to be done?" />
+      
+      <select id="prioritySelect">
+        <option value="low">🟢 Low</option>
+        <option value="medium" selected>🟡 Medium</option>
+        <option value="high">🔴 High</option>
+      </select>
+
       <input type="date" id="dueDate" />
+
+      <select id="taskTypeSelect">
+        <option value="personal">Personal</option>
+        <option value="team">Team</option>
+      </select>
+
+      <input type="email" id="shareEmail" placeholder="Share with email (team only)" style="display:none;" />
+
       <button id="addBtn">Add</button>
     </div>
 
+    <!-- Stats -->
     <div class="stats" id="stats">0 active / 0 total</div>
 
+    <!-- Tasks List -->
     <div class="tasks" id="taskList">
       <div class="empty-state">No tasks yet – add one!</div>
     </div>
 
-    <footer>Made with Love by You</footer>
+    <footer>Made with 💕 for you</footer>
   </div>
 
   <script type="module" src="script.js"></script>
