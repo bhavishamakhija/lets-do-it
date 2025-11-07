@@ -2,7 +2,17 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, Timestamp, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
-const firebaseConfig = { apiKey: "AIzaSyC10vLz8HCpelvdqg-etneUt95JkefGoUk", authDomain: "lets-do-it-dd683.firebaseapp.com", projectId: "lets-do-it-dd683", storageBucket: "lets-do-it-dd683.firebasestorage.app", messagingSenderId: "994172286869", appId: "1:994172286869:web:6eff7b0860fb99062a689c" };
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyC10vLz8HCpelvdqg-etneUt95JkefGoUk",
+  authDomain: "lets-do-it-dd683.firebaseapp.com",
+  databaseURL: "https://lets-do-it-dd683-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "lets-do-it-dd683",
+  storageBucket: "lets-do-it-dd683.firebasestorage.app",
+  messagingSenderId: "994172286869",
+  appId: "1:994172286869:web:6eff7b0860fb99062a689c",
+  measurementId: "G-8MGGFX5H0K"
+};
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
