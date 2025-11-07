@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Let's Do It! - Task Management Made Simple</title>
+    <title>Let's Do It! - Get Things Done</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * {
@@ -14,75 +14,116 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        /* Navigation */
-        nav {
-            background: linear-gradient(135deg, #5c6bc0, #3f51b5);
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            transition: 0.3s;
-        }
-
-        nav a:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #5c6bc0 0%, #a777e4 100%);
-            color: white;
-            padding: 100px 2rem;
-            text-align: center;
+            background: linear-gradient(135deg, #D6E8F3 0%, #DADEE1 50%, #B90E1 100%);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
         }
 
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
+        .container {
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        /* Hero Image */
+        .hero-image {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 24px;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 60px rgba(68, 127, 152, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* Headline */
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #447F98;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
             animation: slideIn 0.8s ease-out;
         }
 
-        .hero p {
-            font-size: 1.4rem;
-            margin-bottom: 40px;
-            opacity: 0.95;
-            max-width: 600px;
+        /* Subheadline */
+        .subtitle {
+            font-size: 1.2rem;
+            color: #629B86;
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+            line-height: 1.6;
             animation: slideIn 0.8s ease-out 0.2s backwards;
         }
 
+        /* CTA Button */
+        .cta-btn {
+            display: inline-block;
+            padding: 16px 48px;
+            background: linear-gradient(135deg, #447F98 0%, #629B86 100%);
+            color: #DADEE1;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(68, 127, 152, 0.25);
+            animation: slideIn 0.8s ease-out 0.4s backwards;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(68, 127, 152, 0.4);
+        }
+
+        .cta-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid rgba(68, 127, 152, 0.2);
+            animation: slideIn 0.8s ease-out 0.6s backwards;
+        }
+
+        footer p {
+            color: #629B86;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        footer a {
+            color: #447F98;
+            text-decoration: none;
+            margin: 0 8px;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: #B90E1;
+        }
+
+        /* Animations */
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -90,301 +131,82 @@
             }
         }
 
-        .cta-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: slideIn 0.8s ease-out 0.4s backwards;
-        }
-
-        .btn {
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 600;
-        }
-
-        .btn-primary {
-            background: white;
-            color: #5c6bc0;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        /* Features Section */
-        .features {
-            padding: 80px 2rem;
-            background: #f4f6f9;
-        }
-
-        .features h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 60px;
-            color: #333;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            color: #5c6bc0;
-            margin-bottom: 20px;
-        }
-
-        .feature-card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .feature-card p {
-            color: #666;
-            font-size: 1rem;
-        }
-
-        /* About Section */
-        .about {
-            padding: 80px 2rem;
-            background: white;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .about h2 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            color: #333;
-        }
-
-        .about p {
-            font-size: 1.1rem;
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.8;
-        }
-
-        /* Footer */
-        footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 40px 2rem;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            text-align: left;
-            margin-bottom: 30px;
-        }
-
-        .footer-section h4 {
-            margin-bottom: 15px;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section a {
-            color: #aaa;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: #5c6bc0;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #555;
-            padding-top: 20px;
-            color: #aaa;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
+            h1 {
+                font-size: 2.2rem;
             }
 
-            .hero p {
-                font-size: 1.1rem;
+            .subtitle {
+                font-size: 1rem;
             }
 
-            .cta-buttons {
-                flex-direction: column;
+            .hero-image {
+                max-width: 300px;
+                margin-bottom: 1.5rem;
             }
 
-            .btn {
-                width: 100%;
+            .cta-btn {
+                padding: 14px 36px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
             }
 
-            nav {
-                flex-wrap: wrap;
+            h1 {
+                font-size: 1.8rem;
             }
 
-            .features h2, .about h2 {
-                font-size: 2rem;
+            .subtitle {
+                font-size: 0.95rem;
+                margin-bottom: 2rem;
+            }
+
+            .hero-image {
+                max-width: 250px;
+                margin-bottom: 1.5rem;
+            }
+
+            .cta-btn {
+                padding: 12px 32px;
+                font-size: 0.95rem;
+            }
+
+            footer {
+                margin-top: 2rem;
+                font-size: 0.85rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="logo">
-            <i class="fas fa-check-circle"></i>
-            Let's Do It!
-        </div>
-        <a href="#features">Features</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <div class="container">
+        <!-- Hero Image - Replace with your Cloudinary URL -->
+        <img 
+            src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1234567890/lets-do-it-hero.jpg" 
+            alt="Let's Do It" 
+            class="hero-image"
+        >
+
+        <!-- Headline -->
         <h1>Let's Do It!</h1>
-        <p>Stay organized, stay productive. Manage your tasks effortlessly with our beautiful and simple task management app.</p>
-        <div class="cta-buttons">
-            <button class="btn btn-primary" onclick="window.open('app.html')">Launch App</button>
-            <button class="btn btn-secondary" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">Learn More</button>
-        </div>
-    </section>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <h2>Why Choose Let's Do It?</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-list-check"></i>
-                </div>
-                <h3>Easy Task Management</h3>
-                <p>Create, organize, and manage your tasks in seconds. Keep everything in one place.</p>
-            </div>
+        <!-- Subtitle -->
+        <p class="subtitle">Get organized, stay productive, and crush your goals.</p>
 
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-calendar-alt"></i>
-                </div>
-                <h3>Due Dates</h3>
-                <p>Never miss a deadline. Set due dates for your tasks and stay on track.</p>
-            </div>
+        <!-- CTA Button -->
+        <a href="app.html" class="cta-btn">Start Now</a>
 
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-cloud"></i>
-                </div>
-                <h3>Cloud Sync</h3>
-                <p>Your tasks are synced securely in the cloud. Access them anywhere, anytime.</p>
-            </div>
+        <!-- Footer -->
+        <footer>
+            <p>Don't leave so soon!</p>
+        </footer>
+    </div>
 
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-moon"></i>
-                </div>
-                <h3>Dark Mode</h3>
-                <p>Easy on the eyes. Switch between light and dark themes whenever you prefer.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-mobile-alt"></i>
-                </div>
-                <h3>Offline Support</h3>
-                <p>Works offline with Progressive Web App technology. Never lose your progress.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <h3>Secure & Private</h3>
-                <p>Your data is encrypted and protected. Only you can access your tasks.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about" id="about">
-        <h2>About Let's Do It!</h2>
-        <p>Let's Do It! is a modern task management application designed to help you stay organized and productive. Whether you're managing personal projects, work tasks, or daily activities, our intuitive interface makes it simple to keep track of everything.</p>
-        <p>Built with modern web technologies, Let's Do It! offers a seamless experience across all your devices. With cloud synchronization, you can start a task on your phone and finish it on your computer – all in real-time.</p>
-        <p>We believe productivity shouldn't be complicated. That's why we've designed Let's Do It! to be clean, fast, and easy to use. Focus on what matters – getting things done.</p>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Product</h4>
-                <ul>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#">Pricing</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">FAQ</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Follow Us</h4>
-                <ul>
-                    <li><a href="#">Twitter</a></li>
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">GitHub</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Let's Do It! All rights reserved.</p>
-        </div>
-    </footer>
 </body>
 </html>
