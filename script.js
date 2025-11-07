@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, Timestamp, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, Timestamp, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
 const firebaseConfig = { apiKey: "AIzaSyC10vLz8HCpelvdqg-etneUt95JkefGoUk", authDomain: "lets-do-it-dd683.firebaseapp.com", projectId: "lets-do-it-dd683", storageBucket: "lets-do-it-dd683.firebasestorage.app", messagingSenderId: "994172286869", appId: "1:994172286869:web:6eff7b0860fb99062a689c" };
@@ -30,12 +30,18 @@ const userEmailEl = document.getElementById('userEmail');
 const logoutBtn = document.getElementById('logoutBtn');
 const searchInput = document.getElementById('searchInput');
 const themeSelect = document.getElementById('themeSelect');
-const toggleBtns = document.querySelectorAll('.toggle-btn');
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebarToggle');
+const sidebarClose = document.getElementById('sidebarClose');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const filterBtns = document.querySelectorAll('.filter-btn');
+const priorityFilters = document.querySelectorAll('.priority-filter');
 
 let currentUser = null;
 let tasksCol = null;
 let unsubscribeTasks = null;
 let currentTaskType = 'personal';
+let currentPriority = 'all';
 let allTasks = [];
 
 // AUTH
@@ -43,7 +49,7 @@ onAuthStateChanged(auth, user => {
   currentUser = user;
   if (user) {
     modal.classList.remove('active');
-    appContainer.style.display = 'block';
+    appContainer.style.display = 'flex';
     userEmailEl.textContent = user.email;
     tasksCol = collection(db, 'tasks');
     startTaskListener();
@@ -79,6 +85,23 @@ authBtn.onclick = async () => {
 
 logoutBtn.onclick = () => confirm('Logout?') && signOut(auth);
 
+// SIDEBAR TOGGLE
+const toggleSidebar = () => {
+  sidebar.classList.toggle('show');
+  sidebarOverlay.classList.toggle('show');
+};
+
+sidebarToggle.onclick = toggleSidebar;
+sidebarClose.onclick = toggleSidebar;
+sidebarOverlay.onclick = toggleSidebar;
+
+// Close sidebar on filter click (mobile)
+document.querySelectorAll('.sidebar-section button, .sidebar-section select, .sidebar-section a').forEach(el => {
+  el.addEventListener('click', () => {
+    if (window.innerWidth <= 768) toggleSidebar();
+  });
+});
+
 // TASKS LISTENER
 const startTaskListener = () => {
   const q = query(tasksCol, orderBy('timestamp', 'desc'));
@@ -91,18 +114,19 @@ const startTaskListener = () => {
 // FILTER & RENDER TASKS
 const filterAndRenderTasks = () => {
   let filtered = allTasks.filter(t => {
-    // Safety check - ensure task has required fields
     if (!t.type) t.type = 'personal';
     if (!t.creatorId) return false;
 
     // Filter by task type
-    if (currentTaskType === 'personal') {
-      if (t.type !== 'personal') return false;
-      if (t.creatorId !== currentUser.uid) return false;
-    } else if (currentTaskType === 'team') {
-      if (t.type !== 'team') return false;
-      if (t.creatorId !== currentUser.uid && !(t.sharedWith && t.sharedWith.includes(currentUser.email))) return false;
-    }
+    if (currentTaskType === 'personal' && t.type !== 'personal') return false;
+    if (currentTaskType === 'team' && t.type !== 'team') return false;
+
+    // Filter by user access
+    if (t.type === 'personal' && t.creatorId !== currentUser.uid) return false;
+    if (t.type === 'team' && t.creatorId !== currentUser.uid && !(t.sharedWith && t.sharedWith.includes(currentUser.email))) return false;
+
+    // Filter by priority
+    if (currentPriority !== 'all' && t.priority !== currentPriority) return false;
 
     // Filter by search
     const search = searchInput.value.toLowerCase();
@@ -151,8 +175,6 @@ const renderTasks = docs => {
   });
 
   statsEl.textContent = `${active} active / ${docs.length} total`;
-  
-  // Check for due dates and show notifications
   checkDueDates(docs);
 };
 
@@ -226,20 +248,25 @@ taskTypeSelect.onchange = () => {
   }
 };
 
-// TOGGLE BUTTONS
-toggleBtns.forEach(btn => {
+// FILTER BUTTONS
+filterBtns.forEach(btn => {
   btn.onclick = () => {
-    toggleBtns.forEach(b => b.classList.remove('active'));
+    filterBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    currentTaskType = btn.dataset.type;
+    currentTaskType = btn.dataset.type === 'all' ? 'personal' : btn.dataset.type;
     filterAndRenderTasks();
   };
 });
 
-// Set Personal as default active
-if (toggleBtns.length > 0) {
-  toggleBtns[0].classList.add('active');
-}
+// PRIORITY FILTERS
+priorityFilters.forEach(btn => {
+  btn.onclick = () => {
+    priorityFilters.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentPriority = btn.dataset.priority;
+    filterAndRenderTasks();
+  };
+});
 
 // SEARCH
 searchInput.addEventListener('input', filterAndRenderTasks);

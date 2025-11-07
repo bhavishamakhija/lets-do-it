@@ -30,66 +30,133 @@
   </div>
 
   <!-- Main App -->
-  <div class="container" id="app" style="display:none">
-    <header>
-      <h1>Let's Do It!</h1>
-      <div class="user-area">
-        <span class="user-email" id="userEmail"></span>
-        <button class="logout-btn" id="logoutBtn">Logout</button>
-        <a href="index.html" class="back-home-btn">← Home</a>
-        <div class="theme-selector">
-          <select id="themeSelect">
-            <option value="coquette">🔵 Coquette</option>
-            <option value="midnight">🌙 Midnight</option>
-            <option value="sunset">🌅 Sunset</option>
-          </select>
+  <div class="app-wrapper" id="app" style="display:none">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h2>Let's Do It!</h2>
+        <button class="sidebar-close" id="sidebarClose">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- User Info -->
+      <div class="sidebar-section user-section">
+        <div class="user-info">
+          <i class="fas fa-user-circle"></i>
+          <span id="userEmail"></span>
         </div>
       </div>
-    </header>
 
-    <!-- Search Bar -->
-    <div class="search-container">
-      <i class="fas fa-search"></i>
-      <input type="text" id="searchInput" placeholder="Search tasks...">
+      <!-- Task Filters -->
+      <div class="sidebar-section">
+        <h3>Tasks</h3>
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-type="personal">
+            <i class="fas fa-file-alt"></i> Personal
+          </button>
+          <button class="filter-btn" data-type="team">
+            <i class="fas fa-users"></i> Team
+          </button>
+          <button class="filter-btn" data-type="all">
+            <i class="fas fa-list"></i> All
+          </button>
+        </div>
+      </div>
+
+      <!-- Priority Filters -->
+      <div class="sidebar-section">
+        <h3>Priority</h3>
+        <div class="filter-buttons">
+          <button class="priority-filter" data-priority="all">
+            <i class="fas fa-filter"></i> All
+          </button>
+          <button class="priority-filter" data-priority="high">
+            <i class="fas fa-circle"></i> High
+          </button>
+          <button class="priority-filter" data-priority="medium">
+            <i class="fas fa-circle"></i> Medium
+          </button>
+          <button class="priority-filter" data-priority="low">
+            <i class="fas fa-circle"></i> Low
+          </button>
+        </div>
+      </div>
+
+      <!-- Theme Selector -->
+      <div class="sidebar-section">
+        <h3>Theme</h3>
+        <select id="themeSelect" class="theme-select">
+          <option value="coquette">🔵 Coquette</option>
+          <option value="midnight">🌙 Midnight</option>
+          <option value="sunset">🌅 Sunset</option>
+        </select>
+      </div>
+
+      <!-- Actions -->
+      <div class="sidebar-section actions">
+        <a href="index.html" class="action-btn">
+          <i class="fas fa-home"></i> Home
+        </a>
+        <button class="action-btn logout-btn" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Header -->
+      <header>
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1>Let's Do It!</h1>
+        <div style="width: 40px;"></div>
+      </header>
+
+      <!-- Search Bar -->
+      <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search tasks...">
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-area">
+        <input type="text" id="taskInput" placeholder="What needs to be done?" />
+        
+        <select id="prioritySelect">
+          <option value="low">🟢 Low</option>
+          <option value="medium" selected>🟡 Medium</option>
+          <option value="high">🔴 High</option>
+        </select>
+
+        <input type="date" id="dueDate" />
+
+        <select id="taskTypeSelect">
+          <option value="personal">Personal</option>
+          <option value="team">Team</option>
+        </select>
+
+        <input type="email" id="shareEmail" placeholder="Share with email (team only)" style="display:none;" />
+
+        <button id="addBtn">Add</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats" id="stats">0 active / 0 total</div>
+
+      <!-- Tasks List -->
+      <div class="tasks" id="taskList">
+        <div class="empty-state">No tasks yet – add one!</div>
+      </div>
+
+      <footer>Made with 💕 for you</footer>
     </div>
-
-    <!-- Task Type Toggle -->
-    <div class="task-type-toggle">
-      <button class="toggle-btn active" data-type="personal">📝 Personal</button>
-      <button class="toggle-btn" data-type="team">👥 Team</button>
-    </div>
-
-    <!-- Input Area -->
-    <div class="input-area">
-      <input type="text" id="taskInput" placeholder="What needs to be done?" />
-      
-      <select id="prioritySelect">
-        <option value="low">🟢 Low</option>
-        <option value="medium" selected>🟡 Medium</option>
-        <option value="high">🔴 High</option>
-      </select>
-
-      <input type="date" id="dueDate" />
-
-      <select id="taskTypeSelect">
-        <option value="personal">Personal</option>
-        <option value="team">Team</option>
-      </select>
-
-      <input type="email" id="shareEmail" placeholder="Share with email (team only)" style="display:none;" />
-
-      <button id="addBtn">Add</button>
-    </div>
-
-    <!-- Stats -->
-    <div class="stats" id="stats">0 active / 0 total</div>
-
-    <!-- Tasks List -->
-    <div class="tasks" id="taskList">
-      <div class="empty-state">No tasks yet – add one!</div>
-    </div>
-
-    <footer>Made with 💕 for you</footer>
   </div>
 
   <script type="module" src="script.js"></script>
